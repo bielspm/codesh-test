@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==5"
+celery = "*"
+django-celery-results = "*"
+redis = "*"
+honcho = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
