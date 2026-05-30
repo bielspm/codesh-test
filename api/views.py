@@ -19,7 +19,7 @@ def hook(request: HttpRequest):
         encoded_payload = base64.b64encode(request.body).decode()
         tarefa = Tarefa.objects.create(payload=encoded_payload, status=Status.PENDENTE)
         process_hook.delay(tarefa.id)
-        logger.info(f'Hook recebido - Task {tarefa.id} gerada: {encoded_payload}')
+        logger.info(f'Hook recebido - Task {tarefa.id} gerada')
         return HttpResponse("A solicitação foi recebida e está sendo processada.", status=202)
 
     except json.JSONDecodeError:

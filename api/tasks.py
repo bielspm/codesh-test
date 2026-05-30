@@ -18,9 +18,9 @@ def process_hook(self, tarefa_id: int):
     try:
         tarefa = Tarefa.objects.get(id=tarefa_id, status=Status.PENDENTE)
         payload = json.loads(base64.b64decode(tarefa.payload.encode()).decode())
-        logger.info(f'Processando Task {tarefa_id}: {payload}')
+        logger.info(f'Processando Task {tarefa_id}')
         time.sleep(30)
-        logger.info(f'Task {tarefa_id} finalizada - payload: {payload}')
+        logger.info(f'Task {tarefa_id} finalizada. Payload: {payload}')
         tarefa.status = Status.CONCLUIDO
         tarefa.save(update_fields=['status'])
     except Exception as exc:

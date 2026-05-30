@@ -10,8 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import datetime
+import logging
 import os
 from pathlib import Path
+from zoneinfo import ZoneInfo
+
+
+class BrtFormatter(logging.Formatter):
+    _tz = ZoneInfo('America/Sao_Paulo')
+
+    def formatTime(self, record, datefmt=None):
+        ct = datetime.datetime.fromtimestamp(record.created, tz=self._tz)
+        if datefmt:
+            return ct.strftime(datefmt)
+        t = ct.strftime(self.default_time_format)
+        return self.default_msec_format % (t, record.msecs)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -109,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -132,6 +146,7 @@ CELERY_TASK_QUEUES = {
     'errors': {},
 }
 CELERY_TASK_DEFAULT_QUEUE = 'default'
+CELERY_WORKER_HIJACK_ROOT_LOGGER = False
 
 # Logging
 LOGGING = {
@@ -139,6 +154,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
+            '()': 'codesh.settings.BrtFormatter',
             'format': '{levelname} {asctime} {name} {message}',
             'style': '{',
         },
@@ -159,12 +175,12 @@ LOGGING = {
     },
     'loggers': {
         'codesh': {
-            'handlers': ['console', 'file'],
+            'handlers': ['file'],
             'level': 'INFO',
             'propagate': False,
         },
         'api': {
-            'handlers': ['console', 'file'],
+            'handlers': ['file'],
             'level': 'INFO',
             'propagate': False,
         },

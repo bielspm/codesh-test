@@ -92,3 +92,9 @@ curl -X POST http://localhost:8000/hook \
 2. Verá que um log novo foi criado, mostrando que a requisição foi recebida
 3. Espere 30 segundos, e verá um novo log com o resultado do processamento
 
+## Como rodar os testes
+
+Na pasta raiz do projeto:
+```bash
+py manage.py test
+```
